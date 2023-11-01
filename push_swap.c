@@ -102,6 +102,33 @@ t_list	*ft_insert_node(t_list *a_stack, int value)
 	}
 }
 
+// func that check whether arguments are already sorted or not
+// check done
+int	ft_issorted(t_list *a_stack)
+{
+	t_list	*current_stack;
+
+	if (a_stack == NULL)
+	{
+		printf("sorted\n");
+		return (1);
+	}
+	current_stack = a_stack;
+	while (current_stack->next != a_stack)
+	{
+		//printf("current_stack:%d\n", current_stack->value);
+		//printf("next_stack:%d\n", current_stack->next->value);
+		if (current_stack->value > current_stack->next->value)
+		{
+			//printf("not sorted\n");
+			return (0);
+		}
+		current_stack = current_stack->next;
+	}
+	//printf("sorted\n");
+	return (1);
+}
+
 int main(int argc, char **argv)
 {
 	t_list *a_stack;
@@ -119,6 +146,7 @@ int main(int argc, char **argv)
 		i++;
 		a_stack = ft_insert_node(a_stack, value);
 	}
+	ft_issorted(a_stack);
 	t_list *current = a_stack;
 	for (i = 0; i < argc - 1; i++) {
 		printf("%di:%d\n", i, a_stack->value);
@@ -144,7 +172,7 @@ int main(int argc, char **argv)
 		ft_free_stack(b_stack);
 		return (0);
 	}
-	ft_sort(a_stack, b_stack);
+	ft_sort(a_stack, b_stack, argc);
 	ft_free_stack(a_stack);
 	ft_free_stack(b_stack);
 	return (0);
