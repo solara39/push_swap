@@ -165,8 +165,8 @@ int main(int argc, char **argv)
 	i = 1;
 	if (argc < 2)
 		return (-1);
-	a_stack = NULL;
-	b_stack = NULL;
+	a_stack = ft_init_stack();
+	b_stack = ft_init_stack();
 	ft_check_arg(argc, argv);
 	while (i < argc)
 	{
@@ -184,13 +184,16 @@ int main(int argc, char **argv)
 		ft_free_stack(b_stack);
 		return (0);
 	}
-	b_stack = ft_init_stack();
+	//b_stack = ft_init_stack();
 	ft_sort(&a_stack, &b_stack, argc);
 	t_list *current = a_stack;
-	for (i = 0; i < argc - 1; i++) {
-		printf("%di:%d\n", i, current->value);
-		*current = *current->next;
-		}
+	for (i = 0; current != a_stack; i++)
+	{
+        	printf("%di:%d\n", i, current->value);
+        	current = current->next;
+	}
+	ft_free_stack(a_stack);
+	ft_free_stack(b_stack);
 	return (0);
 }
 

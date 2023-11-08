@@ -1,8 +1,8 @@
 #include "push_swap.h"
 #include <stdio.h>
 
-//function which return the position(index) of the smallest value
-//not checked yet
+// function which return the position(index) of the smallest value
+// check done
 int	find_index(t_list *stack, int smallest)
 {
 	t_list	*current;
@@ -20,33 +20,40 @@ int	find_index(t_list *stack, int smallest)
 
 
 // funtion which return the smallest value in stack
-// not checked yet
+// check done
 int	get_min(t_list *stack)
 {
 	t_list	*current;
 	int	smallest;
+	int	flag;
 
+	if (stack == NULL)
+		exit(1);
+	current = stack;
 	smallest = stack->value;
-	current = stack->next;
-	while (current != stack)
+	flag = 1;
+	while (flag || current != stack)
 	{
+		flag = 0;
+		current = current->next;
 		if (smallest > current->value)
 			smallest = current->value;
-		current = current->next;
 	}
 	return (smallest);
 }
 
 // function which return the number of list in stack
-// not checked yet
-int	count_list(t_list *a_stack)
+// check done
+int	count_list(t_list **stack)
 {
 	int	cnt;
 	t_list	*current;
 
-	cnt = 1;
-	current = a_stack;
-	while (current->next != a_stack)
+	if (*stack == NULL)
+		return (0);
+	cnt = 0;
+	current = (*stack)->next;
+	while (current != *stack)
 	{
 		cnt++;
 		current = current->next;
@@ -60,16 +67,19 @@ void	push_to_b(t_list **a_stack, t_list **b_stack, int smallest)
 {
 	int	index;
 	int	mid_position;
-
-	index = find_index(*a_stack, smallest);
-	mid_position = count_list(*a_stack) / 2;
+	int	stack_size;
+	
+	stack_size = count_list(a_stack);
 	while ((*a_stack)->value != smallest)
-	{
-		if (index < mid_position)
+	{	
+		index = find_index(*a_stack, smallest);
+		mid_position = count_list(a_stack) / 2;
+		if (index <= mid_position)
 			do_ra(a_stack);
 		else
 			do_rra(a_stack);
 	}
+	printf("len %d\n", count_list(a_stack));
 	do_pb(a_stack, b_stack);
 }
 
@@ -86,31 +96,30 @@ static void	sort_3(t_list **a_stack)
 	a = current->value;
 	b = current->next->value;
 	c = current->next->next->value;
-	printf("a : %d\nb : %d\nc :%d\n", a, b, c);
 	if (a > b && a < c)
 	{
-		printf("number 1\n");
+		printf("1\n");
 		do_sa(a_stack);
 	}
 	else if (a > b && a > c && b > c)
 	{
-		printf("number 2\n");
+		printf("2\n");
 		do_sa(a_stack);
 		do_rra(a_stack);
 	}
 	else if (a > b && a > c && b < c)
 	{
-		printf("number 3\n");
+		printf("3\n");
 		do_ra(a_stack);
 	}
 	else if (a < b && a > c)
 	{
-		printf("number 5\n");
+		printf("5\n");
 		do_rra(a_stack);
 	}
 	else
 	{
-		printf("number 4\n");
+		printf("4\n");
 		do_sa(a_stack);
 		do_ra(a_stack);
 	}
@@ -120,16 +129,11 @@ static void	sort_3(t_list **a_stack)
 // not checked yet
 static void	sort_over4(t_list **a_stack, t_list **b_stack)
 {
-	int	smallest;
-
-	while (count_list(*a_stack) > 3)
-	{
-		smallest = get_min(*a_stack);
-		printf("smallest is %d\n", smallest);
-		push_to_b(a_stack, b_stack, smallest);
-	}
+	int i = 0;
+	while (count_list(a_stack) > 3)
+		push_to_b(a_stack, b_stack, get_min(*a_stack));
 	sort_3(a_stack);
-	while (*b_stack != NULL)
+	while (count_list(b_stack) > 0)
 		do_pa(a_stack, b_stack);
 }
 
@@ -143,22 +147,11 @@ static void	quick_sort(t_list **a_stack, t_list **b_stack)
 void	ft_sort(t_list **a_stack, t_list **b_stack, int argc)
 {
 	if (argc == 3)
-	{
-		printf("argc is 3\n");
 		do_sa(a_stack);
-	}
 	else if (argc == 4)
-	{
-		printf("argc is 4\n");
 		sort_3(a_stack);
-	}
 	else if (argc <= 7)
-	{
-		printf("argc is over 4\n");
 		sort_over4(a_stack, b_stack);
-	}
 	else
-	{
 		quick_sort(a_stack, b_stack);
-	}
 }
