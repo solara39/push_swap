@@ -44,7 +44,7 @@ static int	ft_handle_overflow(const char *str, int index, int sign, size_t count
 	return (1);
 }
 
-static size_t count_len(char *str)
+static size_t count_len(const char *str)
 {
 	size_t	i;
 
@@ -59,10 +59,10 @@ static size_t count_len(char *str)
 int	ft_atoi(const char *str)
 {
 	int				index;
-	long long	result;
+	long long		result;
 	int				sign;
 	int				overflow;
-	size_t		count;
+	size_t			count;
 
 	index = 0;
 	result = 0;
@@ -122,4 +122,15 @@ void	ft_putchar_fd(char c, int fd)
 	write(fd, &c, 1);
 }
 
-void	ft_putstr_fd(char
+void	ft_putstr_fd(char *s, int fd)
+{
+	if (s == NULL)
+		return ;
+	write(fd, s, ft_strlen(s));
+}
+
+void	ft_putendl_fd(char *s, int fd)
+{
+	ft_putstr_fd(s, fd);
+	ft_putchar_fd('\n', fd);
+}

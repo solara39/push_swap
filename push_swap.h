@@ -32,4 +32,6 @@ void	do_rra(t_list **a_stack);
 void	do_rrb(t_list **b_stack);
 void	do_rrr(t_list **a_stack, t_list **b_stack);
 void	do_pa(t_list **a_stack, t_list **b_stack);
-void	do_pb(t_list **a_sta
+void	do_pb(t_list **a_stack, t_list **b_stack);
+
+#endif

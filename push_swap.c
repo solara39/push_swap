@@ -76,6 +76,8 @@ void	ft_check_arg(int argc, char **argv)
 	ft_check_dup(argc, argv); // check done
 }
 
+// initialize stack function
+// may be check done
 t_list	*ft_init_stack()
 {
 	t_list	*new_stack;
@@ -83,11 +85,14 @@ t_list	*ft_init_stack()
 	new_stack = (t_list *)malloc(sizeof(t_list));
 	if (new_stack == NULL)
 		exit(1);
-	new_stack->value = '\0';
+	// new_stack->value = '\0';
 	new_stack->next = new_stack;
 	new_stack->prev = new_stack;
 	return (new_stack);
 }
+
+
+
 
 // insert values toward a_stack
 // may be check done
@@ -113,9 +118,10 @@ t_list	*ft_insert_node(t_list *a_stack, int value)
 		new_stack->prev = last_stack; // assign last_stack as prev
 		a_stack->prev = new_stack; // assign a_stack as prev
 		last_stack->next = new_stack; // assign last_stack as next
-		return (new_stack); // I'm just asking to you!!!!!! (or a_stack)
+		return (a_stack);
 	}
 }
+
 
 // func that check whether arguments are already sorted or not
 // check done
@@ -144,8 +150,8 @@ void	ft_free_stack(t_list *stack)
 
 	if (stack == NULL)
 		return ;
-	current = stack->next;
-	while (current != stack)
+	current = stack;
+	while (current != stack) // not good
 	{
 		tmp = current;
 		current = current->next;
@@ -181,4 +187,36 @@ int main(int argc, char **argv)
 	{
 		ft_free_stack(a_stack);
 		ft_free_stack(b_stack);
-	
+		return (0);
+	}
+	b_stack = ft_init_stack();
+	ft_sort(&a_stack, &b_stack, argc);
+	t_list *current = a_stack;
+	for (i = 0; i < argc - 1; i++)
+	{
+		printf("%di:%d\n", i, current->value);
+		current = current->next;
+	}
+	ft_free_stack(a_stack);
+	ft_free_stack(b_stack);
+
+	return (0);
+}
+
+/*
+#include <libc.h>
+
+__attribute__((destructor))
+static void destructor() {
+    system("leaks -q a.out");
+}
+
+int main()
+{
+    char *s = malloc(100);
+
+    s = "hello world";
+    puts(s);
+    return (0);
+}
+*/

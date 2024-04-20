@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 //function which return the position(index) of the smallest value
-//not checked yet
+//check done
 int	find_index(t_list *stack, int smallest)
 {
 	t_list	*current;
@@ -10,17 +10,23 @@ int	find_index(t_list *stack, int smallest)
 
 	index = 0;
 	current = stack;
-	while (current->value != smallest)
+	if (stack->value == smallest)
+		return (index);
+	current = stack->next;
+	index++;
+	while (current != stack)
 	{
+		if (current->value == smallest)
+			return (index);
 		index++;
 		current = current->next;
 	}
-	return (index);
+	return (0);
 }
 
 
 // funtion which return the smallest value in stack
-// not checked yet
+// check done
 int	get_min(t_list *stack)
 {
 	t_list	*current;
@@ -38,7 +44,7 @@ int	get_min(t_list *stack)
 }
 
 // function which return the number of list in stack
-// not checked yet
+// check done 
 int	count_list(t_list *a_stack)
 {
 	int	cnt;
@@ -62,7 +68,10 @@ void	push_to_b(t_list **a_stack, t_list **b_stack, int smallest)
 	int	mid_position;
 
 	index = find_index(*a_stack, smallest);
+	printf("smallest arguments index i is %d\n", index);
+	printf("smallest value is %d\n", smallest);
 	mid_position = count_list(*a_stack) / 2;
+	printf("mid position is %d\n", mid_position);
 	while ((*a_stack)->value != smallest)
 	{
 		if (index < mid_position)
@@ -118,7 +127,7 @@ static void	sort_3(t_list **a_stack)
 
 // sort function when the number of arguments is 4, 5 or 6
 // not checked yet
-static void	sort_over4(t_list **a_stack, t_list **b_stack)
+static void	sort_4_5_6(t_list **a_stack, t_list **b_stack)
 {
 	int	smallest;
 
@@ -137,16 +146,16 @@ static void	quick_sort(t_list **a_stack, t_list **b_stack)
 }
 
 // parent sort function
-// manipulate which function will call depending on the number of arguments
+// decide which function should be called depending on the number of arguments
 // not checked yet
 void	ft_sort(t_list **a_stack, t_list **b_stack, int argc)
 {
-	if (argc == 3)
+	if (argc == 3) // ok
 	{
 		printf("argc is 3\n");
 		do_sa(a_stack);
 	}
-	else if (argc == 4)
+	else if (argc == 4) // ok
 	{
 		printf("argc is 4\n");
 		sort_3(a_stack);
@@ -154,10 +163,11 @@ void	ft_sort(t_list **a_stack, t_list **b_stack, int argc)
 	else if (argc <= 7)
 	{
 		printf("argc is over 4\n");
-		sort_over4(a_stack, b_stack);
+		sort_4_5_6(a_stack, b_stack);
 	}
 	else
 	{
+		printf("arguments is over 7\n");
 		quick_sort(a_stack, b_stack);
 	}
 }
