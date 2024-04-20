@@ -1,7 +1,7 @@
 #include "push_swap.h"
 #include <stdio.h>
 
-// check argments whether all argments are integer
+// check arguments whether they are all integer
 // check done
 void	ft_check_is_digit(char **argv)
 {
@@ -13,6 +13,8 @@ void	ft_check_is_digit(char **argv)
 	while (argv[i])
 	{
 		j = 0;
+		if (argv[i][j] == '-' || argv[i][j] == '+')
+			j++;
 		while (argv[i][j])
 		{
 			flag = ft_isdigit(argv[i][j]);
@@ -24,11 +26,11 @@ void	ft_check_is_digit(char **argv)
 	}
 }
 
-// check args whether all argv are not over int_max or under int_min
+// check arguments whether each of them are not bigger than int_max or smaller than int_min
 // does not work well!!!!
 void	ft_check_size_argv(int argc, char **argv)
 {
-	int	result;
+	long long	result;
 	int	i;
 
 	i = 1;
@@ -44,7 +46,7 @@ void	ft_check_size_argv(int argc, char **argv)
 	}
 }
 
-// check args whether there is duplicate argments
+// check args whether there are duplicate arguments
 // check done
 void	ft_check_dup(int argc, char **argv)
 {
@@ -65,12 +67,13 @@ void	ft_check_dup(int argc, char **argv)
 	}
 }
 
-// check argv arguments parent function
+// parent function which check arguments
+// first and third functions are done
 void	ft_check_arg(int argc, char **argv)
 {
-	ft_check_is_digit(argv);
-	ft_check_size_argv(argc, argv);
-	ft_check_dup(argc, argv);
+	ft_check_is_digit(argv); // check done
+	ft_check_size_argv(argc, argv); // check → not good?
+	ft_check_dup(argc, argv); // check done
 }
 
 t_list	*ft_init_stack()
@@ -86,7 +89,7 @@ t_list	*ft_init_stack()
 	return (new_stack);
 }
 
-// insert values toward a_stack function
+// insert values toward a_stack
 // may be check done
 t_list	*ft_insert_node(t_list *a_stack, int value)
 {
@@ -105,25 +108,23 @@ t_list	*ft_insert_node(t_list *a_stack, int value)
 	}
 	else
 	{
-		last_stack = a_stack->prev;
-		new_stack->next = a_stack;
-		new_stack->prev = last_stack;
-		a_stack->prev = new_stack;
-		last_stack->next = new_stack;
-		return (a_stack);
+		last_stack = a_stack->prev; // assign last stack
+		new_stack->next = a_stack; // assign new_stack as next
+		new_stack->prev = last_stack; // assign last_stack as prev
+		a_stack->prev = new_stack; // assign a_stack as prev
+		last_stack->next = new_stack; // assign last_stack as next
+		return (new_stack); // I'm just asking to you!!!!!! (or a_stack)
 	}
 }
 
 // func that check whether arguments are already sorted or not
 // check done
-int	ft_issorted(t_list *a_stack)
+int	ft_is_sorted(t_list *a_stack)
 {
 	t_list	*current_stack;
 
 	if (a_stack == NULL)
-	{
 		return (1);
-	}
 	current_stack = a_stack;
 	while (current_stack->next != a_stack)
 	{
@@ -155,66 +156,29 @@ void	ft_free_stack(t_list *stack)
 
 int main(int argc, char **argv)
 {
-	//t_list **a_stack;
-	//t_list	**b_stack;
 	t_list *a_stack;
 	t_list	*b_stack;
 	int	i;
 	int	value;
 
 	i = 1;
-	if (argc < 2)
+	if (argc < 2) // if there is no argument
 		return (-1);
-	a_stack = NULL;
-	b_stack = NULL;
-	ft_check_arg(argc, argv);
+
+	a_stack = NULL; // empty list
+	b_stack = NULL; // empty list
+
+	ft_check_arg(argc, argv); // check arguments whether they are valid
+
 	while (i < argc)
 	{
 		value = ft_atoi(argv[i]);
 		i++;
 		a_stack = ft_insert_node(a_stack, value);
 	}
-	//ft_issorted(*a_stack);
-	//*b_stack = ft_init_stack();
-	//ft_sort(a_stack, b_stack, argc);
-	//t_list *current = *a_stack;
-	if (ft_issorted(a_stack))
+
+	if (ft_is_sorted(a_stack))
 	{
 		ft_free_stack(a_stack);
 		ft_free_stack(b_stack);
-		return (0);
-	}
-	b_stack = ft_init_stack();
-	ft_sort(&a_stack, &b_stack, argc);
-	t_list *current = a_stack;
-	for (i = 0; i < argc - 1; i++) {
-		printf("%di:%d\n", i, current->value);
-		*current = *current->next;
-		}
-	return (0);
-}
-
-/*
-int main(int argc, char **argv)
-{
-	t_list	**a_stack;
-	t_list	**b_stack;
-
-	if (argc < 2)
-		return (-1);
-	ft_check_arg(argv);
-	ft_init_stack(argv, argc, a_stack);
-	ft_insert_value()
-	if (ft_issorted(a_stack))
-	{
-		ft_free_stack(a_stack);
-		ft_free_stack(b_stack);
-		return (0);
-	}
-	ft_sort(a_stack, b_stack, argc);
-	ft_free_stack(a_stack);
-	ft_free_stack(b_stack);
-	return (0);
-}
-
-*/
+	

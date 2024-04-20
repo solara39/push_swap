@@ -10,7 +10,7 @@ size_t	ft_strlen(const char *c)
 	return (i);
 }
 
-int	ft_handle_sign(const char *str, int *index)
+static int	ft_handle_sign(const char *str, int *index)
 {
 	int	sign;
 
@@ -24,43 +24,59 @@ int	ft_handle_sign(const char *str, int *index)
 	return (sign);
 }
 
-int	ft_handle_overflow(const char *str, int index, int sign, long long result)
+static int	ft_handle_overflow(const char *str, int index, int sign, size_t count)
 {
-	if (result > LONG_MAX / 10 && sign != -1)
+	char *_;
+
+	_ = (char *)str;
+	if (count > ft_strlen("9223372036854775807"))
 		return (-1);
-	else if (result > LONG_MAX / 10 && sign == -1)
-		return (0);
-	else if (result == LONG_MAX / 10)
+	else if (count == ft_strlen("9223372036854775807"))
 	{
-		index++;
-		if (str[index] > '6' && sign != -1)
+		if (sign < 0)
+		{
+			if (ft_strncmp(_, "9223372036854775808", 19) > 0)
+				return (0);
+		}
+		else if (ft_strncmp(_, "9223372036854775807", 19) > 0)
 			return (-1);
-		else if (str[index] > '7' && sign == -1)
-			return (0);
-		return (1);
 	}
-	return (2);
+	return (1);
 }
+
+static size_t count_len(char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] >= '0' && str[i] <= '9')
+		i++;
+
+	return (i);
+}
+
 
 int	ft_atoi(const char *str)
 {
-	int			index;
+	int				index;
 	long long	result;
-	int			sign;
-	int			overflow;
+	int				sign;
+	int				overflow;
+	size_t		count;
 
 	index = 0;
 	result = 0;
 	while ((str[index] >= 9 && str[index] <= 13) || str[index] == 32)
 		index++;
 	sign = ft_handle_sign(str, &index);
-	if (ft_strncmp(str, "9223372036854775806", 19) == 0)
-		return (-2);
+	while (str[index] == '0')
+		index++;
+	count = count_len(str);
 	while (ft_isdigit(str[index]))
 	{
 		result = (result * 10) + (str[index] - '0');
-		overflow = ft_handle_overflow(str, index, sign, result);
-		if (overflow != 2)
+		overflow = ft_handle_overflow(str, index, sign, count);
+		if (overflow != 1)
 			return (overflow);
 		index++;
 	}
@@ -106,15 +122,4 @@ void	ft_putchar_fd(char c, int fd)
 	write(fd, &c, 1);
 }
 
-void	ft_putstr_fd(char *s, int fd)
-{
-	if (s == NULL)
-		return ;
-	write(fd, s, ft_strlen(s));
-}
-
-void	ft_putendl_fd(char *s, int fd)
-{
-	ft_putstr_fd(s, fd);
-	ft_putchar_fd('\n', fd);
-}
+void	ft_putstr_fd(char
