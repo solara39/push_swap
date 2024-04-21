@@ -137,18 +137,25 @@ static void	sort_3(t_list **a_stack)
 static void	sort_4_5_6(t_list **a_stack, t_list **b_stack)
 {
 	int	smallest;
+	t_list *tmp;
 
+	tmp = *b_stack;
 	while (count_list(*a_stack) > 3)
 	{
 		smallest = get_min(*a_stack);
 		printf("sort_4_5_6 smallest value is %d\n", smallest);
-		push_to_b(a_stack, b_stack, smallest); // may be mistaken
+		push_to_b(a_stack, b_stack, smallest);
 	}
 	sort_3(a_stack);
-	while (*b_stack != NULL)
+	while (*b_stack != NULL) // may be mistaken
 	{
+		for (int i = 0; i < count_list(*b_stack); i++)
+		{
+			printf("b_stack value is %d\n", tmp->value);
+			tmp = tmp->next;
+		}
 		do_pa(a_stack, b_stack);
-		sleep(1000);
+		sleep(3);
 	}
 }
 
