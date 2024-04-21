@@ -3,7 +3,7 @@
 
 // function which return the number of list in stack
 // check done
-int	count_list(t_list *a_stack)
+static int	count_list(t_list *a_stack)
 {
 	int	cnt;
 	t_list	*current;
@@ -20,18 +20,11 @@ int	count_list(t_list *a_stack)
 
 //function which return the position(index) of the smallest value
 //check done
-int	find_index(t_list *stack, int smallest)
+static int	find_index(t_list *stack, int smallest)
 {
 	t_list	*current;
-	t_list	*tmp;
 	int	index;
 
-	tmp = stack;
-	for (int i = 1; i < count_list(stack) + 1; i++)
-	{
-		printf("value is %d\n", tmp->value);
-		tmp = tmp->next;
-	}
 	index = 0;
 	current = stack;
 	if (stack->value == smallest)
@@ -51,7 +44,7 @@ int	find_index(t_list *stack, int smallest)
 
 // function which return the smallest value in stack
 // check done
-int	get_min(t_list *stack)
+static int	get_min(t_list *stack)
 {
 	t_list	*current;
 	int	smallest;
@@ -75,10 +68,7 @@ void	push_to_b(t_list **a_stack, t_list **b_stack, int smallest)
 	int	mid_position;
 
 	index = find_index(*a_stack, smallest);
-	printf("smallest arguments index i is %d\n", index);
 	mid_position = count_list(*a_stack) / 2;
-	printf("cnt is %d\n", count_list(*a_stack));
-	printf("mid position is %d\n", mid_position);
 	while ((*a_stack)->value != smallest)
 	{
 		if (index < mid_position)
@@ -105,28 +95,28 @@ static void	sort_3(t_list **a_stack)
 	printf("a : %d\nb : %d\nc :%d\n", a, b, c);
 	if (a > b && a < c)
 	{
-		printf("number 1\n");
+		printf("sort type 1\n");
 		do_sa(a_stack);
 	}
 	else if (a > b && a > c && b > c)
 	{
-		printf("number 2\n");
+		printf("sort type 2\n");
 		do_sa(a_stack);
 		do_rra(a_stack);
 	}
 	else if (a > b && a > c && b < c)
 	{
-		printf("number 3\n");
+		printf("sort type 3\n");
 		do_ra(a_stack);
 	}
 	else if (a < b && a > c)
 	{
-		printf("number 5\n");
+		printf("sort type 5\n");
 		do_rra(a_stack);
 	}
 	else
 	{
-		printf("number 4\n");
+		printf("sort type 4\n");
 		do_sa(a_stack);
 		do_ra(a_stack);
 	}
@@ -137,26 +127,15 @@ static void	sort_3(t_list **a_stack)
 static void	sort_4_5_6(t_list **a_stack, t_list **b_stack)
 {
 	int	smallest;
-	t_list *tmp;
 
-	tmp = *b_stack;
 	while (count_list(*a_stack) > 3)
 	{
 		smallest = get_min(*a_stack);
-		printf("sort_4_5_6 smallest value is %d\n", smallest);
 		push_to_b(a_stack, b_stack, smallest);
 	}
 	sort_3(a_stack);
 	while (*b_stack != NULL) // may be mistaken
-	{
-		for (int i = 0; i < count_list(*b_stack); i++)
-		{
-			printf("b_stack value is %d\n", tmp->value);
-			tmp = tmp->next;
-		}
 		do_pa(a_stack, b_stack);
-		sleep(3);
-	}
 }
 
 int partition(t_list **stack, int left, int right)
@@ -164,10 +143,40 @@ int partition(t_list **stack, int left, int right)
 	return (0);
 }
 
+static t_list	*min_position(t_list **stack, int index, int value)
+{
+	t_list	*current;
+	t_list	*min;
+
+	current = *stack;
+	current = current->next;
+	while (current != *stack)
+	{
+		if (value > current->value && current->index != index - 1)
+		{
+			value = current->value;
+			min = current;
+		}
+		current = current->next;
+	}
+	return (current);
+}
+
 // implement someday...
 static void	coordinate_compression(t_list **stack)
 {
-	t_list	*current;
+	t_list	*min_pos;
+	size_t	i;
+
+	i = 1;
+	min_pos = *stack;
+	printf("length %d\n", count_list(*stack));
+	while (i < count_list(*stack) + 1)
+	{
+		min_pos = min_position(stack, i, min_pos->value);
+		min_pos->index = i;
+		i++;
+	}
 }
 
 // recursive function to implement quick sort
@@ -187,8 +196,9 @@ static void	quick_sort(t_list **a_stack, t_list **b_stack)
 {
 	size_t	cnt;
 
+	coordinate_compression(a_stack);
 	cnt = count_list(*a_stack);
-	sort_recursive(a_stack, 0, cnt);
+	//sort_recursive(a_stack, 0, cnt);
 }
 
 // parent sort function
@@ -198,17 +208,15 @@ void	ft_sort(t_list **a_stack, t_list **b_stack, int argc)
 {
 	if (argc == 3) // ok
 	{
-		printf("argc is 3\n");
 		do_sa(a_stack);
 	}
 	else if (argc == 4) // ok
 	{
-		printf("argc is 4\n");
 		sort_3(a_stack);
 	}
-	else if (argc <= 7)
+	else if (argc <= 7) //check now
 	{
-		printf("argc is %d\n", argc - 1);
+		printf("arguments is %d\n", argc - 1);
 		sort_4_5_6(a_stack, b_stack);
 	}
 	else

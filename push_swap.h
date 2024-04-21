@@ -12,6 +12,7 @@ typedef struct list{
 	struct list	*next;
 	struct list	*prev;
 	int		value;
+	int		index;
 }t_list;
 
 

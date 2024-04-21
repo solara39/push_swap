@@ -11,12 +11,7 @@ void	rotate(t_list **stack)
 	t_list	*last;
 
 	first = *stack;
-	last = (*stack)->prev;
 	*stack = first->next;
-	(*stack)->prev = last;
-	last->next = first;
-	first->next = *stack;
-	first->prev = last;
 }
 
 void	do_ra(t_list **a_stack)

@@ -76,19 +76,15 @@ void	ft_check_arg(int argc, char **argv)
 	ft_check_dup(argc, argv); // check done
 }
 
-// initialize stack function
-// may be check done
 t_list	*ft_init_stack()
 {
-	t_list	*new_stack;
+	t_list	*stack;
 
-	new_stack = (t_list *)malloc(sizeof(t_list));
-	if (new_stack == NULL)
+	stack = (t_list *)malloc(sizeof(t_list));
+	if (stack == NULL)
 		exit(1);
-	// new_stack->value = '\0';
-	new_stack->next = new_stack;
-	new_stack->prev = new_stack;
-	return (new_stack);
+	stack = NULL;
+	return (stack);
 }
 
 // insert values toward a_stack
@@ -116,7 +112,7 @@ t_list	*ft_insert_node(t_list *a_stack, int value)
 		a_stack->prev = new_stack; // assign a_stack as prev
 		last_stack->next = new_stack; // assign last_stack as next
 		return (a_stack);
-	}
+	} // doesn't need to free new_stack???
 }
 
 
@@ -157,22 +153,21 @@ void	ft_free_stack(t_list *stack)
 	free(stack);
 }
 
+
 int main(int argc, char **argv)
 {
-	t_list *a_stack;
+	t_list	*a_stack;
 	t_list	*b_stack;
-	int	i;
-	int	value;
+	int		i;
+	int		value;
 
 	i = 1;
 	if (argc < 2) // if there is no argument
 		return (-1);
 
-	a_stack = NULL; // empty list
-	b_stack = NULL; // empty list
-
 	ft_check_arg(argc, argv); // check arguments whether they are valid
 
+	a_stack = NULL; // empty list
 	while (i < argc)
 	{
 		value = ft_atoi(argv[i]);
@@ -187,11 +182,13 @@ int main(int argc, char **argv)
 		return (0);
 	}
 	b_stack = ft_init_stack();
-	ft_sort(&a_stack, &b_stack, argc);
+
+	ft_sort(&a_stack, &b_stack, argc); // out
 	t_list *current = a_stack;
 	for (i = 0; i < argc - 1; i++)
 	{
-		printf("%di:%d\n", i, current->value);
+		printf("%d value %d\n", i, current->value);
+		printf("%d index%d\n", i, current->index);
 		current = current->next;
 	}
 	ft_free_stack(a_stack);

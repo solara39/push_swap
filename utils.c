@@ -24,7 +24,7 @@ static int	ft_handle_sign(const char *str, int *index)
 	return (sign);
 }
 
-static int	ft_handle_overflow(const char *str, int index, int sign, size_t count)
+static int	ft_handle_overflow(const char *str, int sign, size_t count)
 {
 	char *_;
 
@@ -75,7 +75,7 @@ int	ft_atoi(const char *str)
 	while (ft_isdigit(str[index]))
 	{
 		result = (result * 10) + (str[index] - '0');
-		overflow = ft_handle_overflow(str, index, sign, count);
+		overflow = ft_handle_overflow(str, sign, count);
 		if (overflow != 1)
 			return (overflow);
 		index++;
