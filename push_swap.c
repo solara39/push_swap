@@ -91,9 +91,6 @@ t_list	*ft_init_stack()
 	return (new_stack);
 }
 
-
-
-
 // insert values toward a_stack
 // may be check done
 t_list	*ft_insert_node(t_list *a_stack, int value)

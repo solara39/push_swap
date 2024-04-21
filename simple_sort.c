@@ -1,13 +1,37 @@
 #include "push_swap.h"
 #include <stdio.h>
 
+// function which return the number of list in stack
+// check done
+int	count_list(t_list *a_stack)
+{
+	int	cnt;
+	t_list	*current;
+
+	cnt = 1;
+	current = a_stack;
+	while (current->next != a_stack)
+	{
+		cnt++;
+		current = current->next;
+	}
+	return (cnt);
+}
+
 //function which return the position(index) of the smallest value
 //check done
 int	find_index(t_list *stack, int smallest)
 {
 	t_list	*current;
+	t_list	*tmp;
 	int	index;
 
+	tmp = stack;
+	for (int i = 1; i < count_list(stack) + 1; i++)
+	{
+		printf("value is %d\n", tmp->value);
+		tmp = tmp->next;
+	}
 	index = 0;
 	current = stack;
 	if (stack->value == smallest)
@@ -25,7 +49,7 @@ int	find_index(t_list *stack, int smallest)
 }
 
 
-// funtion which return the smallest value in stack
+// function which return the smallest value in stack
 // check done
 int	get_min(t_list *stack)
 {
@@ -43,23 +67,6 @@ int	get_min(t_list *stack)
 	return (smallest);
 }
 
-// function which return the number of list in stack
-// check done 
-int	count_list(t_list *a_stack)
-{
-	int	cnt;
-	t_list	*current;
-
-	cnt = 1;
-	current = a_stack;
-	while (current->next != a_stack)
-	{
-		cnt++;
-		current = current->next;
-	}
-	return (cnt);
-}
-
 // function which will push the smallest argument toward b_stack
 // not checked yet
 void	push_to_b(t_list **a_stack, t_list **b_stack, int smallest)
@@ -69,8 +76,8 @@ void	push_to_b(t_list **a_stack, t_list **b_stack, int smallest)
 
 	index = find_index(*a_stack, smallest);
 	printf("smallest arguments index i is %d\n", index);
-	printf("smallest value is %d\n", smallest);
 	mid_position = count_list(*a_stack) / 2;
+	printf("cnt is %d\n", count_list(*a_stack));
 	printf("mid position is %d\n", mid_position);
 	while ((*a_stack)->value != smallest)
 	{
@@ -82,7 +89,7 @@ void	push_to_b(t_list **a_stack, t_list **b_stack, int smallest)
 	do_pb(a_stack, b_stack);
 }
 
-// sort function when the number of arguments is 3 
+// sort function when the number of arguments is 3
 // check done
 static void	sort_3(t_list **a_stack)
 {
@@ -134,15 +141,47 @@ static void	sort_4_5_6(t_list **a_stack, t_list **b_stack)
 	while (count_list(*a_stack) > 3)
 	{
 		smallest = get_min(*a_stack);
-		push_to_b(a_stack, b_stack, smallest);
+		printf("sort_4_5_6 smallest value is %d\n", smallest);
+		push_to_b(a_stack, b_stack, smallest); // may be mistaken
 	}
 	sort_3(a_stack);
 	while (*b_stack != NULL)
+	{
 		do_pa(a_stack, b_stack);
+		sleep(1000);
+	}
+}
+
+int partition(t_list **stack, int left, int right)
+{
+	return (0);
+}
+
+// implement someday...
+static void	coordinate_compression(t_list **stack)
+{
+	t_list	*current;
+}
+
+// recursive function to implement quick sort
+// creating
+static void sort_recursive(t_list **stack, int left, int right)
+{
+	int pivot;
+
+	if (left < right)
+	{
+		pivot = partition(stack, left, right);
+		sort_recursive(stack, left, right);
+	}
 }
 
 static void	quick_sort(t_list **a_stack, t_list **b_stack)
 {
+	size_t	cnt;
+
+	cnt = count_list(*a_stack);
+	sort_recursive(a_stack, 0, cnt);
 }
 
 // parent sort function
@@ -162,7 +201,7 @@ void	ft_sort(t_list **a_stack, t_list **b_stack, int argc)
 	}
 	else if (argc <= 7)
 	{
-		printf("argc is over 4\n");
+		printf("argc is %d\n", argc - 1);
 		sort_4_5_6(a_stack, b_stack);
 	}
 	else
