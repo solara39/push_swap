@@ -8,7 +8,6 @@
 void	rotate(t_list **stack)
 {
 	t_list	*first;
-	t_list	*last;
 
 	first = *stack;
 	*stack = first->next;
@@ -21,7 +20,7 @@ void	do_ra(t_list **a_stack)
 }
 
 void	do_rb(t_list **b_stack)
-{	
+{
 	rotate(b_stack);
 	ft_putendl_fd("rb", 1);
 }

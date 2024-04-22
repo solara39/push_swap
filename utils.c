@@ -26,7 +26,7 @@ static int	ft_handle_sign(const char *str, int *index)
 
 static int	ft_handle_overflow(const char *str, int sign, size_t count)
 {
-	char *_;
+	char	*_;
 
 	_ = (char *)str;
 	if (count > ft_strlen("9223372036854775807"))
@@ -44,17 +44,15 @@ static int	ft_handle_overflow(const char *str, int sign, size_t count)
 	return (1);
 }
 
-static size_t count_len(const char *str)
+static size_t	count_len(const char *str)
 {
 	size_t	i;
 
 	i = 0;
 	while (str[i] >= '0' && str[i] <= '9')
 		i++;
-
 	return (i);
 }
-
 
 int	ft_atoi(const char *str)
 {
@@ -82,8 +80,6 @@ int	ft_atoi(const char *str)
 	}
 	return (result * sign);
 }
-
-
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {

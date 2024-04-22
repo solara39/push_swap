@@ -7,7 +7,7 @@ void	ft_check_is_digit(char **argv)
 {
 	size_t	i;
 	size_t	j;
-	int	flag;
+	int			flag;
 
 	i = 1;
 	while (argv[i])
@@ -19,29 +19,36 @@ void	ft_check_is_digit(char **argv)
 		{
 			flag = ft_isdigit(argv[i][j]);
 			if (flag == 0)
+			{
+				write(1, "Error\n", 6);
 				exit(1);
+			}
 			j++;
 		}
 		i++;
 	}
 }
 
-// check arguments whether each of them are not bigger than int_max or smaller than int_min
 // does not work well!!!!
 void	ft_check_size_argv(int argc, char **argv)
 {
 	long long	result;
-	int	i;
+	int				i;
 
 	i = 1;
 	while (i < argc)
 	{
 		result = ft_atoi(argv[i]);
-		//printf("result of %d argv:%lld\n",i,result);
 		if (result == 0 && *argv[i] != '0' && ft_strncmp(argv[i], "0", 1))
+		{
+			write(1, "Error\n", 6);
 			exit(1);
+		}
 		if (result > INT_MAX || result < INT_MIN)
+		{
+			write(1, "Error\n", 6);
 			exit(1);
+		}
 		i++;
 	}
 }
@@ -60,7 +67,10 @@ void	ft_check_dup(int argc, char **argv)
 		while (j < argc)
 		{
 			if (ft_atoi(argv[i]) == ft_atoi(argv[j]))
+			{
+				write(1, "Error\n", 6);
 				exit(1);
+			}
 			j++;
 		}
 		i++;
@@ -71,9 +81,9 @@ void	ft_check_dup(int argc, char **argv)
 // first and third functions are done
 void	ft_check_arg(int argc, char **argv)
 {
-	ft_check_is_digit(argv); // check done
-	ft_check_size_argv(argc, argv); // check → not good?
-	ft_check_dup(argc, argv); // check done
+	ft_check_is_digit(argv);
+	ft_check_size_argv(argc, argv);
+	ft_check_dup(argc, argv);
 }
 
 t_list	*ft_init_stack()
@@ -87,8 +97,6 @@ t_list	*ft_init_stack()
 	return (stack);
 }
 
-// insert values toward a_stack
-// may be check done
 t_list	*ft_insert_node(t_list *a_stack, int value)
 {
 	t_list	*new_stack;
@@ -106,17 +114,16 @@ t_list	*ft_insert_node(t_list *a_stack, int value)
 	}
 	else
 	{
-		last_stack = a_stack->prev; // assign last stack
-		new_stack->next = a_stack; // assign new_stack as next
-		new_stack->prev = last_stack; // assign last_stack as prev
-		a_stack->prev = new_stack; // assign a_stack as prev
-		last_stack->next = new_stack; // assign last_stack as next
+		last_stack = a_stack->prev;
+		new_stack->next = a_stack;
+		new_stack->prev = last_stack;
+		a_stack->prev = new_stack;
+		last_stack->next = new_stack;
 		return (a_stack);
-	} // doesn't need to free new_stack???
+	}
+	// doesn't need to free new_stack???
 }
 
-
-// func that check whether arguments are already sorted or not
 // check done
 int	ft_is_sorted(t_list *a_stack)
 {
@@ -134,8 +141,6 @@ int	ft_is_sorted(t_list *a_stack)
 	return (1);
 }
 
-// function which free stack
-// may be check done
 void	ft_free_stack(t_list *stack)
 {
 	t_list	*current;
@@ -144,7 +149,7 @@ void	ft_free_stack(t_list *stack)
 	if (stack == NULL)
 		return ;
 	current = stack;
-	while (current != stack) // not good
+	while (current != stack)
 	{
 		tmp = current;
 		current = current->next;
@@ -152,7 +157,6 @@ void	ft_free_stack(t_list *stack)
 	}
 	free(stack);
 }
-
 
 int main(int argc, char **argv)
 {
@@ -162,38 +166,25 @@ int main(int argc, char **argv)
 	int		value;
 
 	i = 1;
-	if (argc < 2) // if there is no argument
+	if (argc < 2)
 		return (-1);
-
-	ft_check_arg(argc, argv); // check arguments whether they are valid
-
-	a_stack = NULL; // empty list
+	ft_check_arg(argc, argv);
+	a_stack = NULL;
 	while (i < argc)
 	{
 		value = ft_atoi(argv[i]);
 		i++;
 		a_stack = ft_insert_node(a_stack, value);
 	}
-
 	if (ft_is_sorted(a_stack))
 	{
 		ft_free_stack(a_stack);
-		ft_free_stack(b_stack);
 		return (0);
 	}
 	b_stack = ft_init_stack();
-
-	ft_sort(&a_stack, &b_stack, argc); // out
-	t_list *current = a_stack;
-	for (i = 0; i < argc - 1; i++)
-	{
-		printf("%d value %d\n", i, current->value);
-		printf("%d index%d\n", i, current->index);
-		current = current->next;
-	}
+	ft_sort(&a_stack, &b_stack, argc);
 	ft_free_stack(a_stack);
 	ft_free_stack(b_stack);
-
 	return (0);
 }
 
